@@ -30,6 +30,23 @@ app.get("/articles", (req, res) => {
     });
 });
 
+app.post("/articles", (req,res) => {
+    const article = new Article({
+        title: req.body.title,
+        content: req.body.content
+    });
+
+    article.save( err => {
+        if (!err){
+            res.send("Your new article was added!")
+        }
+        else{
+            res.send(err);
+        }
+    });
+});
+
+
 app.listen(3000, function() {
   console.log("Server running on port 3000...");
 });

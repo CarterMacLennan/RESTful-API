@@ -10,7 +10,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewURLParser: true});
+mongoose.connect("mongodb://localhost:27017/wikiDB", {useNewURLParser: true, useUnifiedTopology: true});
 
 const articleSchema = {
     title: String,
@@ -18,6 +18,17 @@ const articleSchema = {
 };
 
 const Article = mongoose.model("Article", articleSchema);
+
+app.get("/articles", (req, res) => {
+    Article.find( (err, documents) => {
+        if (!err){
+            res.send(documents);
+        }
+        else {
+            res.send(err);
+        }
+    });
+});
 
 app.listen(3000, function() {
   console.log("Server running on port 3000...");

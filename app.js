@@ -88,7 +88,31 @@ app.route("/articles/:title")
     )
 })
 
+.patch( (req, res) => {
+    Article.update(
+        {title: req.params.title},
+        {$set: req.body},
+        (err) => {
+            if (!err){
+                res.send("The document has been patched.");
+            }
+            else {
+                res.send(err);
+            }
+        }
+    )
+})
 
+.delete( (req, res) => {
+    Article.deleteOne( {title: req.params.title}, (err) => {
+        if (! err) {
+            res.send("That particular document was deleted.")
+        }
+        else {
+            res.send(err);
+        }
+    })
+});
 
 app.listen(3000, function() {
   console.log("Server running on port 3000...");

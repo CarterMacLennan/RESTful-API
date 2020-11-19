@@ -23,7 +23,7 @@ app.route("/articles")
 
 .get((req, res) => {
     Article.find( (err, documents) => {
-        if (!err){
+        if (!err) {
             res.send(documents);
         }
         else {
@@ -39,7 +39,7 @@ app.route("/articles")
     });
 
     article.save( err => {
-        if (!err){
+        if (!err) {
             res.send("Your new article was added!")
         }
         else{
@@ -50,7 +50,7 @@ app.route("/articles")
 
 .delete((req,res) =>{
     Article.deleteMany( err => {
-        if (!err){
+        if (!err) {
             res.send("All articles in the collection have been deleted.");
         }
         else {
@@ -58,6 +58,37 @@ app.route("/articles")
         }
     });
 });
+
+app.route("/articles/:title")
+
+.get( (req,res) => {
+    Article.findOne({title: req.params.title}, (err, document) => {
+        if (document) {
+            res.send(document);
+        }
+        else {
+            res.send("No articles were found.");
+        }
+    })
+})
+
+.put( (req, res) => {
+    Article.update(
+        {title: req.params.title},
+        {title: req.body.title, content: req.body.content},
+        {overwrite: true},
+        (err) => {
+            if (!err){
+                res.send("The document has been updated.");
+            }
+            else {
+                res.send(err);
+            }
+        }
+    )
+})
+
+
 
 app.listen(3000, function() {
   console.log("Server running on port 3000...");
